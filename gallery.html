@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BS8PJQDXZF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-BS8PJQDXZF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academy Gallery | Mavis Badminton Academy Gobichettipalayam</title>
+  <meta name="description" content="View daily photos, training videos, and match highlights from Mavis Badminton Academy in Gobichettipalayam. Experience premium facility glimpses online.">
+  <meta name="keywords" content="Mavis Badminton Academy gallery, badminton photos, training videos, badminton matches, Gobichettipalayam badminton">
+  <link rel="canonical" href="https://mavisbadminton.com/gallery.html">
+  <link rel="icon" type="image/jpeg" href="https://i.ibb.co/ZpqFnDd0/Logo.jpg">
+  <meta name="robots" content="index, follow">
+
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Firebase App & Database Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+  <style>
+    body {
+      background-color: var(--bg-darker);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .detail-container {
+      max-width: 1200px;
+      margin: 120px auto 60px auto;
+      padding: 0 24px;
+      width: 100%;
+      flex-grow: 1;
+    }
+
+    .back-nav {
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--primary);
+      font-weight: 600;
+      font-family: var(--font-heading);
+      transition: all var(--transition-fast);
+    }
+
+    .back-btn:hover {
+      transform: translateX(-4px);
+      color: var(--primary-hover);
+    }
+
+    /* Filter Tabs Styling */
+    .filter-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 40px;
+      justify-content: center;
+    }
+
+    .filter-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 10px 24px;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-heading);
+      transition: all var(--transition-normal);
+    }
+
+    .filter-btn:hover {
+      border-color: rgba(163, 230, 53, 0.4);
+      color: var(--text-main);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: var(--text-dark);
+      box-shadow: 0 4px 15px var(--primary-glow);
+    }
+
+    /* Gallery Grid */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .gallery-card {
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 280px;
+      overflow: hidden;
+      border-radius: var(--radius-md);
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      transition: all var(--transition-normal);
+      position: relative;
+    }
+
+    .gallery-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(163, 230, 53, 0.3);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px var(--primary-glow);
+    }
+
+    .gallery-preview {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .gallery-preview img,
+    .gallery-preview video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-normal);
+    }
+
+    .gallery-card:hover .gallery-preview img {
+      transform: scale(1.05);
+    }
+
+    /* Overlay Details */
+    .gallery-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(7, 10, 18, 0.9) 0%, rgba(7, 10, 18, 0.4) 70%, transparent 100%);
+      padding: 24px 20px 20px 20px;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .gallery-title {
+      font-size: 1.15rem;
+      font-family: var(--font-heading);
+      color: var(--text-main);
+      font-weight: 700;
+      line-height: 1.3;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .gallery-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .gallery-type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    .gallery-type-badge.video {
+      color: var(--accent);
+    }
+
+    /* Video Play Icon Indicator */
+    .play-icon-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      background: rgba(7, 10, 18, 0.75);
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      z-index: 4;
+      transition: all var(--transition-normal);
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+    }
+
+    .gallery-card:hover .play-icon-overlay {
+      background: var(--accent);
+      color: var(--text-dark);
+      transform: translate(-50%, -50%) scale(1.1);
+      box-shadow: 0 0 25px rgba(6, 182, 212, 0.8);
+    }
+
+    /* Lightbox Modal */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(7, 10, 18, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .lightbox.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .lightbox-content-wrapper {
+      position: relative;
+      width: 90%;
+      max-width: 960px;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: scale-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes scale-up {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .lightbox-close-btn {
+      position: absolute;
+      top: -50px;
+      right: 0;
+      background: none;
+      border: none;
+      color: var(--text-main);
+      font-size: 2.5rem;
+      cursor: pointer;
+      line-height: 1;
+      transition: color var(--transition-fast);
+    }
+
+    .lightbox-close-btn:hover {
+      color: var(--primary);
+    }
+
+    .lightbox-media-container {
+      width: 100%;
+      background: #000;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8);
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox-media-container img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .lightbox-media-container video,
+    .lightbox-media-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    .lightbox-caption {
+      margin-top: 20px;
+      text-align: center;
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+      .filter-tabs {
+        flex-wrap: wrap;
+      }
+      .filter-btn {
+        padding: 8px 18px;
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Header -->
+  <header class="navbar scrolled">
+    <div class="container">
+      <div class="logo">
+        <div class="logo-icon">
+          <img src="https://i.ibb.co/ZpqFnDd0/Logo.jpg" alt="Logo" border="0">
+        </div>
+        <span>Mavis Academy</span>
+      </div>
+      <a href="index.html" class="btn btn-secondary" style="padding: 8px 18px; font-size: 0.85rem;">Go to Home</a>
+    </div>
+  </header>
+
+  <div class="detail-container">
+    <div class="back-nav">
+      <a href="index.html" class="back-btn">
+        <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        Back to Home
+      </a>
+      
+      <h1 class="text-gradient" style="font-size: 2.2rem; font-family: var(--font-heading); text-align: right;">Media Gallery</h1>
+    </div>
+
+    <!-- Category Filter Tabs -->
+    <div class="filter-tabs">
+      <button class="filter-btn active" data-filter="all">All Media</button>
+      <button class="filter-btn" data-filter="image">Photos</button>
+      <button class="filter-btn" data-filter="video">Videos</button>
+    </div>
+
+    <!-- Gallery Grid -->
+    <main class="gallery-grid" id="gallery-grid">
+      <!-- Dynamically loaded -->
+    </main>
+  </div>
+
+  <!-- Full-screen Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-content-wrapper">
+      <button class="lightbox-close-btn" onclick="closeLightbox()">&times;</button>
+      <div class="lightbox-media-container" id="lightbox-media-container">
+        <!-- Rendered dynamically -->
+      </div>
+      <p class="lightbox-caption" id="lightbox-caption"></p>
+      <div id="lightbox-help-link" style="margin-top: 15px; text-align: center; z-index: 10;">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer-bottom" style="margin-top:auto;">
+    <div class="container">
+      <p>&copy; 2026 Mavis Badminton Academy. Located in Gobichettipalayam.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAYbLmshMYCNMTCfvD5W5m8m0iG8uDcb7c",
+      authDomain: "mavis-badmintion-academy.firebaseapp.com",
+      databaseURL: "https://mavis-badmintion-academy-default-rtdb.firebaseio.com",
+      projectId: "mavis-badmintion-academy",
+      storageBucket: "mavis-badmintion-academy.firebasestorage.app",
+      messagingSenderId: "153635676888",
+      appId: "1:153635676888:web:b11d0bad5655e0078aadad",
+      measurementId: "G-BS8PJQDXZF"
+    };
+
+    let db;
+    try {
+      firebase.initializeApp(firebaseConfig);
+      db = firebase.database();
+    } catch(e) {
+      console.error("Firebase connection initialization failed in gallery page", e);
+    }
+
+    let activeFilter = 'all';
+    let galleryItems = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (db) {
+        loadGalleryItems();
+      }
+      initFilterTabs();
+    });
+
+    // Helper to extract direct URL from HTML format if present
+    function extractDirectUrl(url) {
+      if (!url) return "";
+      const trimmed = url.trim();
+      if (trimmed.startsWith('<') && trimmed.includes('>')) {
+        const srcMatch = trimmed.match(/src=["']([^"']+)["']/i);
+        if (srcMatch && srcMatch[1]) {
+          return srcMatch[1];
+        }
+        const hrefMatch = trimmed.match(/href=["']([^"']+)["']/i);
+        if (hrefMatch && hrefMatch[1]) {
+          return hrefMatch[1];
+        }
+      }
+      return trimmed;
+    }
+
+    // Load gallery items in real-time
+    function loadGalleryItems() {
+      const grid = document.getElementById('gallery-grid');
+      db.ref('gallery').on('value', (snapshot) => {
+        grid.innerHTML = '';
+        const data = snapshot.val() || {};
+        galleryItems = Object.keys(data).map(key => {
+          const item = data[key] || {};
+          return {
+            key,
+            ...item,
+            url: extractDirectUrl(item.url || "")
+          };
+        }).reverse(); // Newest first
+
+        renderGallery();
+      });
+    }
+
+    // Filter selector initialization
+    function initFilterTabs() {
+      const btns = document.querySelectorAll('.filter-btn');
+      btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          btns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeFilter = btn.getAttribute('data-filter');
+          renderGallery();
+        });
+      });
+    }
+
+    // Helper: Extract YouTube video ID from ANY YouTube URL format
+    // Handles: youtu.be/ID, youtu.be/ID?si=..., youtube.com/watch?v=ID,
+    //          youtube.com/shorts/ID, youtube.com/embed/ID, and raw 11-char IDs
+  function getYouTubeId(url) {
+  if (!url) return null;
+
+  try {
+    const parsed = new URL(url);
+
+    if (parsed.hostname.includes('youtu.be')) {
+      return parsed.pathname.substring(1);
+    }
+
+    if (parsed.searchParams.get('v')) {
+      return parsed.searchParams.get('v');
+    }
+
+    const shortsMatch = parsed.pathname.match(/\/shorts\/([^/?]+)/);
+    if (shortsMatch) return shortsMatch[1];
+
+    const embedMatch = parsed.pathname.match(/\/embed\/([^/?]+)/);
+    if (embedMatch) return embedMatch[1];
+  } catch (e) {}
+
+  return null;
+}
+
+    function getYouTubeEmbedUrl(url) {
+      const id = getYouTubeId(url);
+      if (id) {
+        // Use youtube-nocookie.com for privacy, autoplay=1, rel=0 hides related
+        return 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+      }
+      return null;
+    }
+
+    // Helper: Verify if it is direct video extension
+    function isDirectVideoUrl(url) {
+      return url.match(/\.(mp4|webm|ogg|mov)$/i) !== null;
+    }
+
+    // Helper: Fetch content using multiple public CORS proxies as fallbacks
+    function fetchWithCORSProxy(url) {
+      const proxies = [
+        `https://corsproxy.io/?${encodeURIComponent(url)}`,
+        `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`
+      ];
+      
+      return new Promise((resolve, reject) => {
+        let currentProxyIndex = 0;
+        
+        function tryFetch() {
+          if (currentProxyIndex >= proxies.length) {
+            reject(new Error("All CORS proxies failed"));
+            return;
+          }
+          
+          const proxyUrl = proxies[currentProxyIndex];
+          fetch(proxyUrl)
+            .then(response => {
+              if (!response.ok) throw new Error("Proxy error");
+              if (proxyUrl.includes('allorigins.win')) {
+                return response.json().then(data => data.contents);
+              } else {
+                return response.text();
+              }
+            })
+            .then(html => {
+              if (!html) throw new Error("Empty content");
+              resolve(html);
+            })
+            .catch(err => {
+              console.warn(`Proxy ${currentProxyIndex} failed, trying next...`, err);
+              currentProxyIndex++;
+              tryFetch();
+            });
+        }
+        
+        tryFetch();
+      });
+    }
+
+    // Helper: Resolve ImgBB viewer link to direct image link via CORS proxies
+    function resolveImgBBUrl(url) {
+      return new Promise((resolve) => {
+        if (!url || !url.includes('ibb.co/') || url.includes('i.ibb.co/')) {
+          resolve(url);
+          return;
+        }
+        
+        fetchWithCORSProxy(url)
+          .then(html => {
+            const match = html.match(/<meta property="og:image" content="([^"]+)"/);
+            if (match && match[1]) {
+              resolve(match[1]);
+            } else {
+              const linkMatch = html.match(/<link rel="image_src" href="([^"]+)"/);
+              if (linkMatch && linkMatch[1]) {
+                resolve(linkMatch[1]);
+              } else {
+                resolve(url);
+              }
+            }
+          })
+          .catch(err => {
+            console.error("Error resolving ImgBB URL:", err);
+            resolve(url);
+          });
+      });
+    }
+
+    // Render grid cards matching filter
+    function renderGallery() {
+      const grid = document.getElementById('gallery-grid');
+      grid.innerHTML = '';
+
+      const filtered = galleryItems.filter(item => {
+        if (activeFilter === 'all') return true;
+        return item.type === activeFilter;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<p style="color:var(--text-muted); font-size:1rem; padding: 40px; text-align:center; grid-column: span 3;">No media items added yet in this category.</p>';
+        return;
+      }
+
+      filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'gallery-card';
+        
+        let mediaHtml = '';
+        let playOverlay = '';
+
+        if ((item.type || '').toLowerCase() === 'video') {
+          const ytId = getYouTubeEmbedUrl(item.url);
+          if (ytId) {
+            const videoId = ytId.split('/embed/')[1].split('?')[0];
+            mediaHtml = `<img src="https://img.youtube.com/vi/${videoId}/0.jpg" alt="${item.title}" onerror="this.src='assets/hero_badminton.png'">`;
+          } else {
+            mediaHtml = `<video src="${item.url}" muted></video>`;
+          }
+          playOverlay = `
+            <div class="play-icon-overlay">
+              <svg style="width:24px; height:24px; fill:currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </div>`;
+        } else {
+          const isImgBBViewer = item.url.includes('ibb.co/') && !item.url.includes('i.ibb.co/');
+          const imgId = `gallery-img-${item.key}`;
+          mediaHtml = `<img id="${imgId}" src="${isImgBBViewer ? 'assets/hero_badminton.png' : item.url}" alt="${item.title}" onerror="this.src='assets/hero_badminton.png'">`;
+          
+          if (isImgBBViewer) {
+            resolveImgBBUrl(item.url).then(directUrl => {
+              const imgEl = document.getElementById(imgId);
+              if (imgEl && directUrl) {
+                imgEl.src = directUrl;
+                item.resolvedUrl = directUrl;
+              }
+            });
+          }
+        }
+
+        const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Academy Moment';
+
+        card.innerHTML = `
+          <div class="gallery-preview">
+            ${mediaHtml}
+            ${playOverlay}
+          </div>
+          <div class="gallery-overlay">
+            <h3 class="gallery-title">${item.title}</h3>
+            <div class="gallery-meta">
+              <span class="gallery-type-badge ${item.type}">
+                ${item.type === 'video' ? '📹 Video' : '🖼️ Photo'}
+              </span>
+              <span>${dateStr}</span>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener('click', () => {
+          openLightbox(item);
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
+    // Load YouTube iframe on user click (facade → iframe swap)
+    // On file:// protocol YouTube always shows Error 153 — open in new tab instead.
+    // On http/https (localhost or live server) — embed plays normally.
+    window.loadYouTubePlayer = function(videoId, originalUrl, el) {
+      if (window.location.protocol === 'file:') {
+        // YouTube blocks all file:// embeds (Error 153). Open on YouTube directly.
+        window.open('https://www.youtube.com/watch?v=' + videoId, '_blank');
+        return;
+      }
+      // HTTP/HTTPS: swap facade for real player. autoplay works because user clicked.
+      const container = el.parentElement;
+      container.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="width:100%;height:100%;border:none;display:block;"></iframe>`;
+    };
+
+    // Lightbox modal view control
+    function openLightbox(item) {
+      const modal = document.getElementById('lightbox');
+      const container = document.getElementById('lightbox-media-container');
+      const caption = document.getElementById('lightbox-caption');
+      const helpLink = document.getElementById('lightbox-help-link');
+
+      container.innerHTML = '';
+      helpLink.innerHTML = '';
+      caption.innerText = item.title;
+
+      const displayUrl = item.resolvedUrl || item.url;
+
+      if ((item.type || '').toLowerCase() === 'video') {
+        const ytId = getYouTubeId(item.url);
+
+        if (ytId) {
+          // ── YouTube Facade Pattern ─────────────────────────────────────
+          // Show thumbnail + big play button. On click → swap to real iframe.
+          // On file:// protocol: clicking opens YouTube in new tab (Error 153 fix).
+          // On http/https: clicking loads embedded player with autoplay.
+          // ─────────────────────────────────────────────────────────────────
+          const thumbHq  = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+          const thumbMax = `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`;
+          const isFile   = window.location.protocol === 'file:';
+          const btnLabel = isFile ? '▶ OPEN ON YOUTUBE' : '▶ TAP TO PLAY';
+          const btnHint  = isFile
+            ? '<div style="position:absolute;top:10px;left:0;right:0;text-align:center;padding:4px 12px;font-size:0.72rem;color:rgba(255,220,100,0.9);font-weight:600;text-shadow:0 1px 3px rgba(0,0,0,1);">⚠ Open via a web server to embed</div>'
+            : '';
+
+          container.innerHTML = `
+            <div id="yt-facade"
+                 onclick="loadYouTubePlayer('${ytId}', '${item.url}', this)"
+                 style="width:100%;height:100%;position:relative;cursor:pointer;background:#000;display:flex;align-items:center;justify-content:center;">
+              <img src="${thumbMax}"
+                   onerror="this.src='${thumbHq}'"
+                   alt="${item.title}"
+                   style="width:100%;height:100%;object-fit:cover;opacity:0.85;display:block;">
+              ${btnHint}
+              <!-- YouTube-style red play button -->
+              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+                          width:72px;height:50px;background:rgba(220,0,0,0.92);border-radius:14px;
+                          display:flex;align-items:center;justify-content:center;
+                          box-shadow:0 4px 20px rgba(0,0,0,0.5);
+                          transition:transform 0.15s,background 0.15s;"
+                   onmouseover="this.style.background='rgb(255,0,0)';this.style.transform='translate(-50%,-50%) scale(1.1)'"
+                   onmouseout="this.style.background='rgba(220,0,0,0.92)';this.style.transform='translate(-50%,-50%) scale(1)'">
+                <svg viewBox="0 0 24 24" style="width:30px;height:30px;fill:white;margin-left:5px;">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+              </div>
+              <div style="position:absolute;bottom:12px;left:0;right:0;text-align:center;
+                          color:rgba(255,255,255,0.9);font-size:0.8rem;font-weight:700;
+                          text-shadow:0 1px 4px rgba(0,0,0,0.9);letter-spacing:0.05em;">
+                ${btnLabel}
+              </div>
+            </div>`;
+
+          helpLink.innerHTML = `<a href="${item.url}" target="_blank" rel="noopener"
+            style="color:var(--primary);text-decoration:underline;font-weight:600;font-size:0.85rem;
+                   display:inline-flex;align-items:center;gap:6px;">
+            📹 Watch directly on YouTube →
+          </a>`;
+
+        } else if (isDirectVideoUrl(item.url)) {
+          container.innerHTML = `<video src="${item.url}" controls style="width:100%;height:100%;"></video>`;
+
+        } else {
+          // Unknown video URL — embed as generic iframe
+          container.innerHTML = `<iframe src="${item.url}" frameborder="0"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
+            style="width:100%;height:100%;border:none;"></iframe>`;
+          helpLink.innerHTML = `<a href="${item.url}" target="_blank" rel="noopener"
+            style="color:var(--primary);text-decoration:underline;font-weight:600;font-size:0.85rem;
+                   display:inline-flex;align-items:center;gap:6px;">
+            🔗 Open video link in new tab →
+          </a>`;
+        }
+
+      } else {
+        container.innerHTML = `<img src="${displayUrl}" alt="${item.title}"
+          onerror="this.src='assets/hero_badminton.png'"
+          style="max-width:100%;max-height:100%;object-fit:contain;">`;
+      }
+
+      modal.style.display = 'flex';
+      setTimeout(() => { modal.classList.add('active'); }, 50);
+    }
+    function closeLightbox() {
+      const modal = document.getElementById('lightbox');
+      const container = document.getElementById('lightbox-media-container');
+      const helpLink = document.getElementById('lightbox-help-link');
+      
+      modal.classList.remove('active');
+      setTimeout(() => {
+        modal.style.display = 'none';
+        container.innerHTML = ''; // Stop video/iframe playback
+        helpLink.innerHTML = '';
+      }, 300);
+    }
+
+    // Close lightbox on clicking backdrop
+    document.getElementById('lightbox').addEventListener('click', (e) => {
+      if (e.target.id === 'lightbox') {
+        closeLightbox();
+      }
+    });
+  </script>
+  <script src="cursor.js"></script>
+</body>
+</html>

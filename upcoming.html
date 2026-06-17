@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BS8PJQDXZF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-BS8PJQDXZF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upcoming Badminton Tournaments & Registration | Mavis Academy</title>
+  <meta name="description" content="Register for upcoming badminton tournaments at Mavis Badminton Academy, Gobichettipalayam. View match schedules, age groups, categories, and join the competition.">
+  <meta name="keywords" content="Upcoming badminton tournaments, register badminton tournament, Gobichettipalayam badminton competition, Mavis academy matches, play badminton tournament">
+  <link rel="canonical" href="https://mavisbadminton.com/upcoming.html">
+  <link rel="icon" type="image/jpeg" href="https://i.ibb.co/ZpqFnDd0/Logo.jpg">
+  <meta name="robots" content="index, follow">
+
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Firebase App & Database Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+  <style>
+    body {
+      background-color: var(--bg-darker);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .detail-container {
+      max-width: 1000px;
+      margin: 120px auto 60px auto;
+      padding: 0 24px;
+      width: 100%;
+      flex-grow: 1;
+    }
+    .back-nav {
+      margin-bottom: 30px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--primary);
+      font-weight: 600;
+      font-family: var(--font-heading);
+      transition: all var(--transition-fast);
+    }
+    .back-btn:hover {
+      transform: translateX(-4px);
+      color: var(--primary-hover);
+    }
+    .upcoming-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 40px;
+      align-items: start;
+    }
+    .upcoming-visual-card {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .upcoming-visual-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+    .upcoming-info {
+      padding: 20px 0;
+    }
+    .event-badge {
+      background: rgba(6, 182, 212, 0.1);
+      color: var(--accent);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(6, 182, 212, 0.2);
+    }
+    .upcoming-title {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      line-height: 1.1;
+      font-family: var(--font-heading);
+    }
+    .upcoming-desc {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin-bottom: 30px;
+    }
+    .registration-form-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 32px;
+      box-shadow: var(--shadow-lg);
+    }
+    .registration-form-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .other-upcoming-section {
+      margin-top: 80px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 60px;
+    }
+    .events-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 30px;
+    }
+    .event-card {
+      cursor: pointer;
+    }
+    @media (max-width: 992px) {
+      .upcoming-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .upcoming-title {
+        font-size: 2rem;
+      }
+      .events-list {
+        grid-template-columns: 1fr;
+      }
+      .detail-container {
+        margin-top: 90px;
+      }
+    }
+    @media (max-width: 480px) {
+      .upcoming-title {
+        font-size: 1.8rem;
+      }
+      .upcoming-desc {
+        font-size: 0.95rem;
+      }
+      .registration-form-card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Header -->
+  <header class="navbar scrolled">
+    <div class="container">
+      <div class="logo">
+        <div class="logo-icon">
+          <img src="https://i.ibb.co/ZpqFnDd0/Logo.jpg" alt="Logo" border="0">
+        </div>
+        <span>Mavis Academy</span>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <a href="index.html" class="btn btn-secondary" style="padding: 8px 18px; font-size: 0.85rem;">Go to Home</a>
+        <a href="gallery.html" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.85rem; box-shadow: none;">Go to Gallery</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="detail-container">
+    <div class="back-nav">
+      <a href="index.html#tournaments" class="back-btn">
+        <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        Back to Tournaments
+      </a>
+    </div>
+
+    <!-- Main Upcoming Info Grid -->
+    <div class="upcoming-grid">
+      <!-- Left side: Tournament Image & Info -->
+      <div class="upcoming-info">
+        <div class="event-badge">
+          🎾 Upcoming Event
+        </div>
+        <h1 class="upcoming-title text-gradient" id="event-title">Loading Tournament Details...</h1>
+        
+        <div class="upcoming-visual-card" style="margin-bottom: 24px;">
+          <img id="event-image" src="assets/coaching_kids.png" alt="Tournament Image">
+        </div>
+        
+        <p class="upcoming-desc" id="event-desc">Retrieving dates and registration constraints from Mavis Academy. Please wait...</p>
+      </div>
+
+      <!-- Right side: Registration Form -->
+      <div class="registration-form-card">
+        <h3>Event Registration</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom: 24px;">Fill out this form to register. A WhatsApp message copy will be drafted to confirm with the administrator.</p>
+        
+        <form id="event-register-form">
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" for="reg-name">Your Full Name</label>
+            <input class="form-input" type="text" id="reg-name" placeholder="e.g. Rithish Kumar" required>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" for="reg-phone">WhatsApp Number</label>
+            <input class="form-input" type="tel" id="reg-phone" placeholder="e.g. 9876543210" required>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" for="reg-email">Email Address</label>
+            <input class="form-input" type="email" id="reg-email" placeholder="name@example.com" required>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 24px;">
+            <label class="form-label" for="reg-notes">Additional Remarks / Age Group</label>
+            <input class="form-input" type="text" id="reg-notes" placeholder="e.g. Under-19 category, Left handed player">
+          </div>
+
+          <button class="btn btn-primary" type="submit" style="width: 100%;">Submit Registration</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Other upcoming tournaments list -->
+    <section class="other-upcoming-section">
+      <h3 style="font-family: var(--font-heading); font-size: 1.6rem; color: var(--text-main);">More Upcoming Tournaments</h3>
+      <div class="events-list" id="more-events-grid">
+        <!-- Loaded dynamically -->
+      </div>
+    </section>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <footer class="footer-bottom" style="margin-top:auto;">
+    <div class="container">
+      <p>&copy; 2026 Mavis Badminton Academy. Located in Gobichettipalayam.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAYbLmshMYCNMTCfvD5W5m8m0iG8uDcb7c",
+      authDomain: "mavis-badmintion-academy.firebaseapp.com",
+      databaseURL: "https://mavis-badmintion-academy-default-rtdb.firebaseio.com",
+      projectId: "mavis-badmintion-academy",
+      storageBucket: "mavis-badmintion-academy.firebasestorage.app",
+      messagingSenderId: "153635676888",
+      appId: "1:153635676888:web:b11d0bad5655e0078aadad",
+      measurementId: "G-BS8PJQDXZF"
+    };
+
+    let db;
+    try {
+      firebase.initializeApp(firebaseConfig);
+      db = firebase.database();
+    } catch(e) {
+      console.error(e);
+    }
+
+    const OWNER_PHONE = "919842799975"; // Academy Owner phone
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const tournamentId = urlParams.get('id');
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (db) {
+        if (tournamentId) {
+          loadSelectedEvent(tournamentId);
+        } else {
+          loadFirstEvent();
+        }
+        loadAllOtherEvents();
+      }
+      initRegistrationForm();
+    });
+
+    // Helper: Toast
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </svg>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        setTimeout(() => toast.remove(), 500);
+      }, 3500);
+    }
+
+    // Helper: Fetch content using multiple public CORS proxies as fallbacks
+    function fetchWithCORSProxy(url) {
+      const proxies = [
+        `https://corsproxy.io/?${encodeURIComponent(url)}`,
+        `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`
+      ];
+      
+      return new Promise((resolve, reject) => {
+        let currentProxyIndex = 0;
+        
+        function tryFetch() {
+          if (currentProxyIndex >= proxies.length) {
+            reject(new Error("All CORS proxies failed"));
+            return;
+          }
+          
+          const proxyUrl = proxies[currentProxyIndex];
+          fetch(proxyUrl)
+            .then(response => {
+              if (!response.ok) throw new Error("Proxy error");
+              if (proxyUrl.includes('allorigins.win')) {
+                return response.json().then(data => data.contents);
+              } else {
+                return response.text();
+              }
+            })
+            .then(html => {
+              if (!html) throw new Error("Empty content");
+              resolve(html);
+            })
+            .catch(err => {
+              console.warn(`Proxy ${currentProxyIndex} failed, trying next...`, err);
+              currentProxyIndex++;
+              tryFetch();
+            });
+        }
+        
+        tryFetch();
+      });
+    }
+
+    // Helper: Resolve ImgBB viewer link to direct image link via CORS proxies
+    function resolveImgBBUrl(url) {
+      return new Promise((resolve) => {
+        if (!url || !url.includes('ibb.co/') || url.includes('i.ibb.co/')) {
+          resolve(url);
+          return;
+        }
+        
+        fetchWithCORSProxy(url)
+          .then(html => {
+            const match = html.match(/<meta property="og:image" content="([^"]+)"/);
+            if (match && match[1]) {
+              resolve(match[1]);
+            } else {
+              const linkMatch = html.match(/<link rel="image_src" href="([^"]+)"/);
+              if (linkMatch && linkMatch[1]) {
+                resolve(linkMatch[1]);
+              } else {
+                resolve(url);
+              }
+            }
+          })
+          .catch(err => {
+            console.error("Error resolving ImgBB URL:", err);
+            resolve(url);
+          });
+      });
+    }
+
+    // Helper to extract direct URL from HTML format if present
+    function extractDirectUrl(url) {
+      if (!url) return "";
+      const trimmed = url.trim();
+      if (trimmed.startsWith('<') && trimmed.includes('>')) {
+        const srcMatch = trimmed.match(/src=["']([^"']+)["']/i);
+        if (srcMatch && srcMatch[1]) {
+          return srcMatch[1];
+        }
+        const hrefMatch = trimmed.match(/href=["']([^"']+)["']/i);
+        if (hrefMatch && hrefMatch[1]) {
+          return hrefMatch[1];
+        }
+      }
+      return trimmed;
+    }
+
+    function loadSelectedEvent(id) {
+      db.ref(`tournaments/${id}`).once('value').then(snapshot => {
+        const t = snapshot.val();
+        if (t) {
+          t.imageUrl = extractDirectUrl(t.imageUrl || "");
+          const imgEl = document.getElementById('event-image');
+          const cardEl = document.querySelector('.upcoming-visual-card');
+          if (imgEl) imgEl.style.display = 'block';
+          if (cardEl) cardEl.style.display = 'block';
+          imgEl.src = 'assets/coaching_kids.png'; // placeholder
+          resolveImgBBUrl(t.imageUrl).then(url => {
+            if (imgEl) imgEl.src = url || 'assets/coaching_kids.png';
+          });
+          document.getElementById('event-title').innerText = t.title;
+          document.getElementById('event-desc').innerText = t.description;
+        } else {
+          loadFirstEvent();
+        }
+      });
+    }
+
+    function loadFirstEvent() {
+      db.ref('tournaments').orderByChild('category').equalTo('Upcoming').limitToLast(1).once('value').then(snapshot => {
+        const val = snapshot.val();
+        const imgEl = document.getElementById('event-image');
+        const cardEl = document.querySelector('.upcoming-visual-card');
+        if (val) {
+          const key = Object.keys(val)[0];
+          const t = val[key];
+          t.imageUrl = extractDirectUrl(t.imageUrl || "");
+          if (imgEl) imgEl.style.display = 'block';
+          if (cardEl) cardEl.style.display = 'block';
+          imgEl.src = 'assets/coaching_kids.png'; // placeholder
+          resolveImgBBUrl(t.imageUrl).then(url => {
+            if (imgEl) imgEl.src = url || 'assets/coaching_kids.png';
+          });
+          document.getElementById('event-title').innerText = t.title;
+          document.getElementById('event-desc').innerText = t.description;
+        } else {
+          document.getElementById('event-title').innerText = "No Data";
+          document.getElementById('event-desc').innerText = "No tournament data available.";
+          if (imgEl) imgEl.style.display = 'none';
+          if (cardEl) cardEl.style.display = 'none';
+        }
+      });
+    }
+
+    function loadAllOtherEvents() {
+      const grid = document.getElementById('more-events-grid');
+      db.ref('tournaments').once('value').then(snapshot => {
+        grid.innerHTML = '';
+        const list = snapshot.val() || {};
+        let count = 0;
+        
+        Object.keys(list).forEach(key => {
+          const t = list[key];
+          t.imageUrl = extractDirectUrl(t.imageUrl || "");
+          if (t.category === 'Upcoming' && key !== tournamentId) {
+            count++;
+            const card = document.createElement('div');
+            card.className = 'glass-card coaching-card event-card';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+            
+            const isImgBB = t.imageUrl && t.imageUrl.includes('ibb.co/') && !t.imageUrl.includes('i.ibb.co/');
+            const cardImgId = `event-img-${key}`;
+            
+            card.innerHTML = `
+              <div class="coaching-img-wrapper" style="height: 160px;">
+                <img id="${cardImgId}" src="${isImgBB ? 'assets/coaching_kids.png' : (t.imageUrl || 'assets/coaching_kids.png')}" alt="${t.title}" onerror="this.src='assets/coaching_kids.png'">
+              </div>
+              <div style="padding: 16px;">
+                <h4 style="font-family: var(--font-heading); font-size:1rem; margin-bottom: 4px; color: var(--accent);">${t.title}</h4>
+                <p style="font-size:0.75rem; color:var(--text-muted); line-height:1.4;">${t.description.substring(0, 80)}...</p>
+              </div>
+            `;
+            
+            if (isImgBB) {
+              resolveImgBBUrl(t.imageUrl).then(url => {
+                const imgEl = document.getElementById(cardImgId);
+                if (imgEl && url) imgEl.src = url;
+              });
+            }
+            
+            card.addEventListener('click', () => {
+              window.location.href = `upcoming.html?id=${key}`;
+            });
+            grid.appendChild(card);
+          }
+        });
+
+        if (count === 0) {
+          grid.innerHTML = '<p style="color:var(--text-muted); font-size:0.9rem; grid-column: span 3; text-align:center;">No other upcoming events listed.</p>';
+        }
+      });
+    }
+
+    function initRegistrationForm() {
+      const form = document.getElementById('event-register-form');
+      if (!form) return;
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const name = document.getElementById('reg-name').value.trim();
+        const phone = document.getElementById('reg-phone').value.trim();
+        const email = document.getElementById('reg-email').value.trim();
+        const notes = document.getElementById('reg-notes').value.trim();
+        const eventTitle = document.getElementById('event-title').innerText;
+
+        if (!name || !phone || !email) {
+          showToast("Please fill out all required fields", "error");
+          return;
+        }
+
+        const registration = {
+          name,
+          phone,
+          email,
+          notes,
+          eventTitle,
+          eventId: tournamentId || 'general',
+          createdAt: firebase.database.ServerValue.TIMESTAMP
+        };
+
+        if (db) {
+          db.ref('tournament_registrations').push(registration).then(() => {
+            showToast("Registration submitted successfully!");
+            
+            // Format WhatsApp dispatch message
+            const greetingMsg = `Hello Mavis Badminton Academy,\n\nI have registered for the upcoming tournament: ${eventTitle}.\n\n👤 Participant Name: ${name}\n📞 WhatsApp Number: ${phone}\n📧 Email Address: ${email}\n📝 Notes/Category: ${notes || 'None'}\n\nPlease confirm my registration details. Thank you!`;
+            const encodedMsg = encodeURIComponent(greetingMsg);
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=${OWNER_PHONE}&text=${encodedMsg}`;
+            
+            // Redirect to WhatsApp
+            window.open(whatsappUrl, '_blank');
+            
+            form.reset();
+          }).catch(err => {
+            console.error(err);
+            showToast("Failed to submit registration. Try again.", "error");
+          });
+        } else {
+          showToast("Database is currently offline.", "error");
+        }
+      });
+    }
+  </script>
+  <script src="cursor.js"></script>
+</body>
+</html>

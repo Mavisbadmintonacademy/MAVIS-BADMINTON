@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BS8PJQDXZF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-BS8PJQDXZF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tournament Champions | Mavis Badminton Academy Gobichettipalayam</title>
+  <meta name="description" content="Celebrate the achievements of our tournament champions and winners at Mavis Badminton Academy in Gobichettipalayam. View highlights and past match success stories.">
+  <meta name="keywords" content="Mavis Badminton Academy champions, tournament winners Gobichettipalayam, badminton match highlights, badminton winners, Gobichettipalayam badminton tournament">
+  <link rel="canonical" href="https://mavisbadminton.com/winners.html">
+  <link rel="icon" type="image/jpeg" href="https://i.ibb.co/ZpqFnDd0/Logo.jpg">
+  <meta name="robots" content="index, follow">
+
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Firebase App & Database Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+  <style>
+    body {
+      background-color: var(--bg-darker);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .detail-container {
+      max-width: 900px;
+      margin: 120px auto 60px auto;
+      padding: 0 24px;
+      width: 100%;
+      flex-grow: 1;
+    }
+    .back-nav {
+      margin-bottom: 30px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--primary);
+      font-weight: 600;
+      font-family: var(--font-heading);
+      transition: all var(--transition-fast);
+    }
+    .back-btn:hover {
+      transform: translateX(-4px);
+      color: var(--primary-hover);
+    }
+    .champion-hero {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .champion-img-card {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(163, 230, 53, 0.1);
+      position: relative;
+    }
+    .champion-img-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+    .champion-info {
+      padding: 20px 0;
+    }
+    .trophy-badge {
+      background: rgba(163, 230, 53, 0.1);
+      color: var(--primary);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(163, 230, 53, 0.2);
+    }
+    .champion-title {
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+      line-height: 1.1;
+      font-family: var(--font-heading);
+    }
+    .champion-desc {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 30px;
+    }
+    .other-winners-section {
+      margin-top: 80px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 60px;
+    }
+    .winners-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 30px;
+    }
+    .winner-card {
+      cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      .champion-hero {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      .champion-title {
+        font-size: 2rem;
+      }
+      .winners-grid {
+        grid-template-columns: 1fr;
+      }
+      .detail-container {
+        margin-top: 90px;
+      }
+    }
+    @media (max-width: 480px) {
+      .champion-title {
+        font-size: 1.7rem;
+      }
+      .champion-desc {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Header for Consistency -->
+  <header class="navbar scrolled">
+    <div class="container">
+      <div class="logo">
+        <div class="logo-icon">
+          <img src="https://i.ibb.co/ZpqFnDd0/Logo.jpg" alt="Logo" border="0">
+        </div>
+        <span>Mavis Academy</span>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <a href="index.html" class="btn btn-secondary" style="padding: 8px 18px; font-size: 0.85rem;">Go to Home</a>
+        <a href="gallery.html" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.85rem; box-shadow: none;">Go to Gallery</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="detail-container">
+    <div class="back-nav">
+      <a href="index.html#tournaments" class="back-btn">
+        <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        Back to Tournaments
+      </a>
+    </div>
+
+    <!-- Main Showcase -->
+    <main class="champion-hero" id="champion-showcase">
+      <div class="champion-img-card">
+        <img id="champ-image" src="assets/hero_badminton.png" alt="Loading Champion Profile...">
+      </div>
+      
+      <div class="champion-info">
+        <div class="trophy-badge">
+          🏆 Champion Highlight
+        </div>
+        <h1 class="champion-title text-gradient" id="champ-title">Loading Champion Details...</h1>
+        <p class="champion-desc" id="champ-desc">Fetching latest tournament records from the academy database. Please wait...</p>
+        
+        <div style="display:flex; gap:16px;">
+          <a href="index.html#booking" class="btn btn-primary">Book a Court Now</a>
+          <button class="btn btn-secondary" onclick="shareEvent()">Share Achievement</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Other past champions -->
+    <section class="other-winners-section">
+      <h3 style="font-family: var(--font-heading); font-size: 1.6rem; color: var(--text-main);">More Past Champions</h3>
+      <div class="winners-grid" id="more-champions-grid">
+        <!-- Dynamically loaded -->
+      </div>
+    </section>
+  </div>
+
+  <footer class="footer-bottom" style="margin-top:auto;">
+    <div class="container">
+      <p>&copy; 2026 Mavis Badminton Academy. Located in Gobichettipalayam.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAYbLmshMYCNMTCfvD5W5m8m0iG8uDcb7c",
+      authDomain: "mavis-badmintion-academy.firebaseapp.com",
+      databaseURL: "https://mavis-badmintion-academy-default-rtdb.firebaseio.com",
+      projectId: "mavis-badmintion-academy",
+      storageBucket: "mavis-badmintion-academy.firebasestorage.app",
+      messagingSenderId: "153635676888",
+      appId: "1:153635676888:web:b11d0bad5655e0078aadad",
+      measurementId: "G-BS8PJQDXZF"
+    };
+
+    let db;
+    try {
+      firebase.initializeApp(firebaseConfig);
+      db = firebase.database();
+    } catch(e) {
+      console.error(e);
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const tournamentId = urlParams.get('id');
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (db) {
+        if (tournamentId) {
+          loadSelectedChampion(tournamentId);
+        } else {
+          loadFirstChampion();
+        }
+        loadAllOtherChampions();
+      }
+    });
+
+    // Helper: Fetch content using multiple public CORS proxies as fallbacks
+    function fetchWithCORSProxy(url) {
+      const proxies = [
+        `https://corsproxy.io/?${encodeURIComponent(url)}`,
+        `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`
+      ];
+      
+      return new Promise((resolve, reject) => {
+        let currentProxyIndex = 0;
+        
+        function tryFetch() {
+          if (currentProxyIndex >= proxies.length) {
+            reject(new Error("All CORS proxies failed"));
+            return;
+          }
+          
+          const proxyUrl = proxies[currentProxyIndex];
+          fetch(proxyUrl)
+            .then(response => {
+              if (!response.ok) throw new Error("Proxy error");
+              if (proxyUrl.includes('allorigins.win')) {
+                return response.json().then(data => data.contents);
+              } else {
+                return response.text();
+              }
+            })
+            .then(html => {
+              if (!html) throw new Error("Empty content");
+              resolve(html);
+            })
+            .catch(err => {
+              console.warn(`Proxy ${currentProxyIndex} failed, trying next...`, err);
+              currentProxyIndex++;
+              tryFetch();
+            });
+        }
+        
+        tryFetch();
+      });
+    }
+
+    // Helper: Resolve ImgBB viewer link to direct image link via CORS proxies
+    function resolveImgBBUrl(url) {
+      return new Promise((resolve) => {
+        if (!url || !url.includes('ibb.co/') || url.includes('i.ibb.co/')) {
+          resolve(url);
+          return;
+        }
+        
+        fetchWithCORSProxy(url)
+          .then(html => {
+            const match = html.match(/<meta property="og:image" content="([^"]+)"/);
+            if (match && match[1]) {
+              resolve(match[1]);
+            } else {
+              const linkMatch = html.match(/<link rel="image_src" href="([^"]+)"/);
+              if (linkMatch && linkMatch[1]) {
+                resolve(linkMatch[1]);
+              } else {
+                resolve(url);
+              }
+            }
+          })
+          .catch(err => {
+            console.error("Error resolving ImgBB URL:", err);
+            resolve(url);
+          });
+      });
+    }
+
+    // Helper to extract direct URL from HTML format if present
+    function extractDirectUrl(url) {
+      if (!url) return "";
+      const trimmed = url.trim();
+      if (trimmed.startsWith('<') && trimmed.includes('>')) {
+        const srcMatch = trimmed.match(/src=["']([^"']+)["']/i);
+        if (srcMatch && srcMatch[1]) {
+          return srcMatch[1];
+        }
+        const hrefMatch = trimmed.match(/href=["']([^"']+)["']/i);
+        if (hrefMatch && hrefMatch[1]) {
+          return hrefMatch[1];
+        }
+      }
+      return trimmed;
+    }
+
+    function loadSelectedChampion(id) {
+      db.ref(`tournaments/${id}`).once('value').then(snapshot => {
+        const t = snapshot.val();
+        if (t) {
+          t.imageUrl = extractDirectUrl(t.imageUrl || "");
+          const imgEl = document.getElementById('champ-image');
+          const cardEl = document.querySelector('.champion-img-card');
+          if (imgEl) imgEl.style.display = 'block';
+          if (cardEl) cardEl.style.display = 'block';
+          imgEl.src = 'assets/hero_badminton.png'; // placeholder
+          resolveImgBBUrl(t.imageUrl).then(url => {
+            if (imgEl) imgEl.src = url || 'assets/hero_badminton.png';
+          });
+          document.getElementById('champ-title').innerText = t.title;
+          document.getElementById('champ-desc').innerText = t.description;
+        } else {
+          loadFirstChampion();
+        }
+      });
+    }
+
+    function loadFirstChampion() {
+      db.ref('tournaments').orderByChild('category').equalTo('Winner').limitToLast(1).once('value').then(snapshot => {
+        const val = snapshot.val();
+        const imgEl = document.getElementById('champ-image');
+        const cardEl = document.querySelector('.champion-img-card');
+        if (val) {
+          const key = Object.keys(val)[0];
+          const t = val[key];
+          t.imageUrl = extractDirectUrl(t.imageUrl || "");
+          if (imgEl) imgEl.style.display = 'block';
+          if (cardEl) cardEl.style.display = 'block';
+          imgEl.src = 'assets/hero_badminton.png'; // placeholder
+          resolveImgBBUrl(t.imageUrl).then(url => {
+            if (imgEl) imgEl.src = url || 'assets/hero_badminton.png';
+          });
+          document.getElementById('champ-title').innerText = t.title;
+          document.getElementById('champ-desc').innerText = t.description;
+        } else {
+          document.getElementById('champ-title').innerText = "No Data";
+          document.getElementById('champ-desc').innerText = "No tournament data available.";
+          if (imgEl) imgEl.style.display = 'none';
+          if (cardEl) cardEl.style.display = 'none';
+        }
+      });
+    }
+
+    function loadAllOtherChampions() {
+      const grid = document.getElementById('more-champions-grid');
+      db.ref('tournaments').once('value').then(snapshot => {
+        grid.innerHTML = '';
+        const list = snapshot.val() || {};
+        let count = 0;
+        
+        Object.keys(list).forEach(key => {
+          const t = list[key];
+          t.imageUrl = extractDirectUrl(t.imageUrl || "");
+          if (t.category === 'Winner' && key !== tournamentId) {
+            count++;
+            const card = document.createElement('div');
+            card.className = 'glass-card coaching-card winner-card';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+            
+            const isImgBB = t.imageUrl && t.imageUrl.includes('ibb.co/') && !t.imageUrl.includes('i.ibb.co/');
+            const cardImgId = `champ-img-${key}`;
+            
+            card.innerHTML = `
+              <div class="coaching-img-wrapper" style="height: 160px;">
+                <img id="${cardImgId}" src="${isImgBB ? 'assets/hero_badminton.png' : (t.imageUrl || 'assets/hero_badminton.png')}" alt="${t.title}" onerror="this.src='assets/hero_badminton.png'">
+              </div>
+              <div style="padding: 16px;">
+                <h4 style="font-family: var(--font-heading); font-size:1rem; margin-bottom: 4px; color: var(--primary);">${t.title}</h4>
+                <p style="font-size:0.75rem; color:var(--text-muted); line-height: 1.4;">${t.description.substring(0, 80)}...</p>
+              </div>
+            `;
+            
+            if (isImgBB) {
+              resolveImgBBUrl(t.imageUrl).then(url => {
+                const imgEl = document.getElementById(cardImgId);
+                if (imgEl && url) imgEl.src = url;
+              });
+            }
+            
+            card.addEventListener('click', () => {
+              window.location.href = `winners.html?id=${key}`;
+            });
+            grid.appendChild(card);
+          }
+        });
+
+        if (count === 0) {
+          grid.innerHTML = '<p style="color:var(--text-muted); font-size:0.9rem; grid-column: span 3; text-align:center;">No other champions listed.</p>';
+        }
+      });
+    }
+
+    function shareEvent() {
+      if (navigator.share) {
+        navigator.share({
+          title: document.getElementById('champ-title').innerText,
+          text: document.getElementById('champ-desc').innerText,
+          url: window.location.href,
+        }).catch(err => console.log(err));
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+        alert("Link copied to clipboard!");
+      }
+    }
+  </script>
+  <script src="cursor.js"></script>
+</body>
+</html>
