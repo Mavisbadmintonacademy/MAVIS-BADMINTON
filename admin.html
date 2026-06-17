@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BS8PJQDXZF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-BS8PJQDXZF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mavis Academy | Admin Control Panel</title>
+  <link rel="icon" type="image/jpeg" href="https://i.ibb.co/ZpqFnDd0/Logo.jpg">
+  
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Firebase App & Database Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+  <style>
+    body {
+      background-color: var(--bg-darker);
+      margin: 0;
+      padding: 0;
+      color: var(--text-main);
+      font-family: var(--font-body);
+    }
+    .admin-wrapper {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+      background: radial-gradient(circle at top right, rgba(163,230,53,0.05), transparent 40%), var(--bg-darker);
+    }
+    .admin-sidebar {
+      background: var(--bg-dark);
+      border-right: 1px solid var(--border-color);
+      padding: 30px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 50;
+    }
+    .admin-menu {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 40px;
+    }
+    .admin-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all var(--transition-fast);
+    }
+    .admin-menu-item:hover,
+    .admin-menu-item.active {
+      background: rgba(163, 230, 53, 0.08);
+      color: var(--primary);
+    }
+    .admin-menu-item svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+    }
+    .admin-main {
+      padding: 50px;
+      overflow-y: auto;
+    }
+    .admin-header {
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .admin-panel {
+      display: none;
+      animation: fade-in-panel 0.3s ease-out;
+    }
+    .admin-panel.active {
+      display: block;
+    }
+    @keyframes fade-in-panel {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Table Styling Improvements */
+    .admin-table-wrapper {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      box-shadow: var(--shadow-md);
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+    .admin-table th {
+      background: rgba(15, 23, 42, 0.85);
+      color: var(--text-main);
+      font-weight: 700;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      font-family: var(--font-heading);
+      letter-spacing: 0.02em;
+    }
+    .admin-table td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-muted);
+      vertical-align: middle;
+    }
+    .admin-table tr:last-child td {
+      border-bottom: none;
+    }
+    .admin-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-main);
+    }
+    
+    /* Buttons and Actions */
+    .action-btn {
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      border: none;
+      margin-right: 4px;
+      margin-bottom: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-approve {
+      background-color: #16a34a;
+      color: white;
+    }
+    .btn-approve:hover {
+      background-color: #15803d;
+      transform: translateY(-1px);
+    }
+    .btn-cancel {
+      background-color: #ef4444;
+      color: white;
+    }
+    .btn-cancel:hover {
+      background-color: #dc2626;
+      transform: translateY(-1px);
+    }
+    .btn-edit {
+      background-color: #3b82f6;
+      color: white;
+    }
+    .btn-edit:hover {
+      background-color: #2563eb;
+      transform: translateY(-1px);
+    }
+    .btn-delete {
+      background-color: #4b5563;
+      color: white;
+    }
+    .btn-delete:hover {
+      background-color: #374151;
+      transform: translateY(-1px);
+    }
+    
+    /* Badges */
+    .badge-status {
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      display: inline-block;
+      letter-spacing: 0.05em;
+    }
+    .badge-status.confirmed {
+      background: rgba(22, 163, 74, 0.15);
+      color: #4ade80;
+      border: 1px solid rgba(22, 163, 74, 0.2);
+    }
+    .badge-status.available {
+      background: rgba(234, 179, 8, 0.15);
+      color: #facc15;
+      border: 1px solid rgba(234, 179, 8, 0.2);
+    }
+    .badge-status.maintenance {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 16px;
+    }
+    
+    /* Switch Slider */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 24px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #334155;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: var(--primary);
+    }
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+
+    /* Modal Backdrop & Popup Window */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(7, 10, 18, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      width: 90%;
+      max-width: 520px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 30px;
+      z-index: 1001;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--border-color);
+    }
+    .modal.active {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
+    }
+    .close-modal-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.8rem;
+      cursor: pointer;
+      line-height: 1;
+      transition: color var(--transition-fast);
+    }
+    .close-modal-btn:hover {
+      color: #ef4444;
+    }
+    
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    .settings-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 30px;
+      box-shadow: var(--shadow-md);
+    }
+    .settings-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .settings-row:last-child {
+      border-bottom: none;
+    }
+
+    @media (max-width: 992px) {
+      .admin-wrapper {
+        grid-template-columns: 1fr;
+      }
+      .admin-sidebar {
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .admin-menu {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        margin-top: 20px;
+      }
+      .admin-menu-item {
+        white-space: nowrap;
+      }
+      .admin-main {
+        padding: 24px;
+      }
+      .form-row, .settings-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-wrapper">
+    
+    <!-- Sidebar Menu Options -->
+    <aside class="admin-sidebar">
+      <div>
+        <div class="logo">
+          <div class="logo-icon" style="width:30px; height:30px;">
+            <img src="https://i.ibb.co/ZpqFnDd0/Logo.jpg" alt="Logo" border="0">
+          </div>
+          <span>Mavis Admin</span>
+        </div>
+        
+        <ul class="admin-menu">
+          <li class="admin-menu-item active" data-tab="bookings-panel">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Bookings
+          </li>
+          <li class="admin-menu-item" data-tab="tournaments-panel">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="7"/><path d="M5.49 19.82A12.11 12.11 0 0 1 12 18a12.11 12.11 0 0 1 6.51 1.82M12 15v6m-4 0h8"/></svg>
+            Tournaments
+          </li>
+          <li class="admin-menu-item" data-tab="registrations-panel">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Registrations
+          </li>
+          <li class="admin-menu-item" data-tab="inquiries-panel">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Inquiries
+          </li>
+
+          <li class="admin-menu-item" data-tab="gallery-panel">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" fill="none" stroke="currentColor" style="width: 18px; height: 18px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Gallery Manager
+          </li>
+
+          <li class="admin-menu-item" data-tab="settings-panel">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Settings
+          </li>
+        </ul>
+      </div>
+
+      <div style="font-size:0.8rem; color:var(--text-muted); text-align:center;">
+        Mavis Academy v1.0
+      </div>
+    </aside>
+
+    <!-- Main Content Panels -->
+    <main class="admin-main">
+      
+      <!-- Panel 1: Bookings Management -->
+      <section class="admin-panel active" id="bookings-panel">
+        <div class="admin-header">
+          <div>
+            <h2 style="font-size: 1.8rem; font-family: var(--font-heading); color: var(--text-main);">Court Reservations</h2>
+            <p style="color:var(--text-muted); font-size:0.9rem;">Review and manage player court bookings. Approved slots block bookings on the website.</p>
+          </div>
+          <div style="display:flex; gap:12px;">
+            <button class="btn btn-primary" onclick="openCreateBookingModal()" style="padding: 10px 20px; font-size: 0.85rem;">+ Add Booking</button>
+            <button class="btn btn-secondary" id="admin-clear-bookings-btn" style="padding: 10px 20px; font-size: 0.85rem;">Clear All Bookings</button>
+          </div>
+        </div>
+        
+        <div class="admin-table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Player Name</th>
+                <th>Mobile Number</th>
+                <th>Court</th>
+                <th>Date</th>
+                <th>Time Slot</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-bookings-tbody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Panel 2: Tournaments Achievements -->
+      <section class="admin-panel" id="tournaments-panel">
+        <div class="admin-header">
+          <div>
+            <h2 style="font-size: 1.8rem; font-family: var(--font-heading);">Tournaments Manager</h2>
+            <p style="color:var(--text-muted); font-size:0.9rem;">Add tournament winners (via image links) or list upcoming events.</p>
+          </div>
+          <button class="btn btn-secondary" id="admin-clear-tournaments-btn" style="padding: 10px 20px; font-size: 0.85rem;">Clear All Entries</button>
+        </div>
+
+        <div class="glass-card" style="margin-bottom: 30px;">
+          <h3 id="tournament-form-title" style="font-size:1.3rem; margin-bottom:16px; font-family:var(--font-heading); color: var(--primary);">Add New Entry</h3>
+          <form id="tournament-form">
+            <input type="hidden" id="tournament-edit-key" value="">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="tournament-category">Category</label>
+                <select class="form-input" id="tournament-category">
+                  <option value="Winner">Winner (Recent Champ)</option>
+                  <option value="Upcoming">Upcoming Match/Tournament</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="tournament-title">Event/Winner Title</label>
+                <input class="form-input" type="text" id="tournament-title" placeholder="e.g. Under-17 Doubles Champions" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="tournament-desc">Details/Congratulations/Date</label>
+                <input class="form-input" type="text" id="tournament-desc" placeholder="e.g. Winners: Vignesh & Sanjay | Date: July 12" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="tournament-img">Image URL Link</label>
+                <input class="form-input" type="text" id="tournament-img" placeholder="Paste image address from web (e.g. https://...)" required>
+                <div style="display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap;">
+                  <button type="button" class="action-btn btn-edit" style="background:#475569; margin:0;" onclick="setImagePreset('assets/hero_badminton.png')">Preset 1 (Hero)</button>
+                  <button type="button" class="action-btn btn-edit" style="background:#475569; margin:0;" onclick="setImagePreset('assets/indoor_courts.png')">Preset 2 (Courts)</button>
+                  <button type="button" class="action-btn btn-edit" style="background:#475569; margin:0;" onclick="setImagePreset('assets/coaching_kids.png')">Preset 3 (Kids)</button>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:12px;">
+              <button class="btn btn-primary" type="submit" id="tournament-submit-btn" style="margin-top:10px;">Upload Tournament Info</button>
+              <button class="btn btn-secondary" type="button" id="tournament-cancel-btn" style="margin-top:10px; display:none;" onclick="cancelTournamentEdit()">Cancel Edit</button>
+            </div>
+          </form>
+        </div>
+
+        <h3 style="font-size:1.3rem; margin-bottom:16px; font-family:var(--font-heading);">Active Tournament Entries</h3>
+        <div class="admin-table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Title</th>
+                <th>Description / Date</th>
+                <th>Image Link</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-tournaments-tbody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Panel 3: Tournament Registrations -->
+      <section class="admin-panel" id="registrations-panel">
+        <div class="admin-header">
+          <div>
+            <h2 style="font-size: 1.8rem; font-family: var(--font-heading);">Tournament Registrations</h2>
+            <p style="color:var(--text-muted); font-size:0.9rem;">Review and manage player registrations for upcoming tournaments.</p>
+          </div>
+          <button class="btn btn-secondary" id="admin-clear-registrations-btn" style="padding: 10px 20px; font-size: 0.85rem;">Clear All Registrations</button>
+        </div>
+
+        <div class="admin-table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Participant</th>
+                <th>Mobile Number</th>
+                <th>Email Address</th>
+                <th>Tournament Title</th>
+                <th>Remarks / Category</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-registrations-tbody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Panel 4: Inquiries Panel -->
+      <section class="admin-panel" id="inquiries-panel">
+        <div class="admin-header">
+          <div>
+            <h2 style="font-size: 1.8rem; font-family: var(--font-heading);">Program Inquiries</h2>
+            <p style="color:var(--text-muted); font-size:0.9rem;">Customer contact submissions and batch registration inquiries.</p>
+          </div>
+          <div style="display:flex; gap:12px;">
+            <button class="btn btn-primary" onclick="openCreateInquiryModal()" style="padding: 10px 20px; font-size: 0.85rem;">+ Add Inquiry</button>
+            <button class="btn btn-secondary" id="admin-clear-inquiries-btn" style="padding: 10px 20px; font-size: 0.85rem;">Clear All Inquiries</button>
+          </div>
+        </div>
+
+        <div class="admin-table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Program Interested</th>
+                <th>Message</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-inquiries-tbody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Panel 5: Gallery Manager Panel -->
+      <section class="admin-panel" id="gallery-panel">
+        <div class="admin-header">
+          <div>
+            <h2 style="font-size: 1.8rem; font-family: var(--font-heading); color: var(--text-main);">Gallery Manager</h2>
+            <p style="color:var(--text-muted); font-size:0.9rem;">Upload daily images/videos and manage public gallery listings.</p>
+          </div>
+          <button class="btn btn-secondary" id="admin-clear-gallery-btn" style="padding: 10px 20px; font-size: 0.85rem;">Clear All Media</button>
+        </div>
+
+        <!-- Add Media Card Form -->
+        <div class="glass-card" style="margin-bottom: 30px;">
+          <h3 id="gallery-form-title" style="font-size:1.3rem; margin-bottom:16px; font-family:var(--font-heading); color: var(--primary);">Add Media Item</h3>
+          <form id="admin-gallery-form">
+            <input type="hidden" id="gallery-edit-key" value="">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="gallery-item-type">Media Type</label>
+                <select class="form-input" id="gallery-item-type" required>
+                  <option value="image">Photo (Image Link)</option>
+                  <option value="video">Video (YouTube / Direct Link)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="gallery-item-title">Title / Caption</label>
+                <input class="form-input" type="text" id="gallery-item-title" placeholder="e.g. Smashes Practice session" required>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label class="form-label" for="gallery-item-url">Media URL Link</label>
+              <input class="form-input" type="text" id="gallery-item-url" placeholder="Paste direct image/video URL or YouTube link" required>
+              <p style="color:var(--text-muted); font-size:0.75rem; margin-top: 6px;">For photos, upload on ImgBB and copy the direct image link. For videos, paste the YouTube share link or a direct mp4 URL.</p>
+            </div>
+
+            <div style="display:flex; gap:12px;">
+              <button class="btn btn-primary" type="submit" id="gallery-submit-btn" style="margin-top:10px;">Upload Media to Gallery</button>
+              <button class="btn btn-secondary" type="button" id="gallery-cancel-btn" style="margin-top:10px; display:none;" onclick="cancelGalleryEdit()">Cancel Edit</button>
+            </div>
+          </form>
+        </div>
+
+        <h3 style="font-size:1.3rem; margin-bottom:16px; font-family:var(--font-heading);">Current Gallery Items</h3>
+        <div class="admin-table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Preview</th>
+                <th>Title</th>
+                <th>Type</th>
+                <th>URL Link</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-gallery-tbody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Panel 6: Configuration Settings -->
+      <section class="admin-panel" id="settings-panel">
+        <div class="admin-header">
+          <div>
+            <h2 style="font-size: 1.8rem; font-family: var(--font-heading);">Academy Configuration</h2>
+            <p style="color:var(--text-muted); font-size:0.9rem;">Adjust hourly rates, availability, and court operations in real-time.</p>
+          </div>
+        </div>
+
+        <div class="settings-grid">
+          <!-- Court Status Switches -->
+          <div class="settings-card">
+            <h3 style="font-size:1.2rem; margin-bottom:16px; font-family:var(--font-heading); color: var(--primary);">Court Operational Status</h3>
+            
+            <div class="settings-row">
+              <div class="settings-info">
+                <h4 style="font-size:1.05rem;">Court 1 (Synthetic Mat)</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Status: <span id="court1-status-text" style="color:var(--primary); font-weight:700;">Active</span></p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="settings-court1-status" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="settings-row">
+              <div class="settings-info">
+                <h4 style="font-size:1.05rem;">Court 2 (Synthetic Mat)</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Status: <span id="court2-status-text" style="color:var(--primary); font-weight:700;">Active</span></p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="settings-court2-status" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Pricing Config -->
+          <div class="settings-card">
+            <h3 style="font-size:1.2rem; margin-bottom:16px; font-family:var(--font-heading); color: var(--primary);">Hourly Court Pricing</h3>
+            
+            <div class="form-group" style="margin-bottom:24px;">
+              <label class="form-label" for="settings-price-synthetic">Court Rental Rate (₹/hour)</label>
+              <input class="form-input" type="number" id="settings-price-synthetic" value="500">
+            </div>
+
+            <button class="btn btn-primary" id="save-settings-btn" style="width: 100%;">Save Academy Configuration</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- Reusable Modal Backdrop -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeAllModals()"></div>
+
+  <!-- Booking Modal Container -->
+  <div class="modal" id="booking-modal">
+    <div class="modal-header">
+      <h3 id="booking-modal-title" style="font-family:var(--font-heading); font-size:1.3rem; margin:0;">Add New Booking</h3>
+      <button class="close-modal-btn" onclick="closeModal('booking-modal')">&times;</button>
+    </div>
+    <form id="booking-modal-form">
+      <input type="hidden" id="booking-edit-key">
+      
+      <div class="form-group" style="margin-bottom:12px;">
+        <label class="form-label" for="book-name-input">Player Name</label>
+        <input class="form-input" type="text" id="book-name-input" required placeholder="Player's full name">
+      </div>
+      
+      <div class="form-group" style="margin-bottom:12px;">
+        <label class="form-label" for="book-phone-input">Mobile Number</label>
+        <input class="form-input" type="tel" id="book-phone-input" required placeholder="Player's mobile number">
+      </div>
+      
+      <div class="form-group" style="margin-bottom:12px;">
+        <label class="form-label" for="book-court-input">Court</label>
+        <select class="form-input" id="book-court-input" required>
+          <option value="Court 1 (Synthetic)">Court 1 (Synthetic)</option>
+          <option value="Court 2 (Synthetic)">Court 2 (Synthetic)</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label class="form-label" for="book-date-input">Date</label>
+        <input class="form-input" type="date" id="book-date-input" required>
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label class="form-label" for="book-slot-input">Time Slot</label>
+        <select class="form-input" id="book-slot-input" required>
+          <option value="05:00 AM - 06:00 AM">05:00 AM - 06:00 AM</option>
+          <option value="06:00 AM - 07:00 AM">06:00 AM - 07:00 AM</option>
+          <option value="07:00 AM - 08:00 AM">07:00 AM - 08:00 AM</option>
+          <option value="08:00 AM - 09:00 AM">08:00 AM - 09:00 AM</option>
+          <option value="09:00 AM - 10:00 AM">09:00 AM - 10:00 AM</option>
+          <option value="04:00 PM - 05:00 PM">04:00 PM - 05:00 PM</option>
+          <option value="05:00 PM - 06:00 PM">05:00 PM - 06:00 PM</option>
+          <option value="06:00 PM - 07:00 PM">06:00 PM - 07:00 PM</option>
+          <option value="07:00 PM - 08:00 PM">07:00 PM - 08:00 PM</option>
+          <option value="08:00 PM - 09:00 PM">08:00 PM - 09:00 PM</option>
+          <option value="09:00 PM - 10:00 PM">09:00 PM - 10:00 PM</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom:20px;">
+        <label class="form-label" for="book-status-input">Booking Status</label>
+        <select class="form-input" id="book-status-input" required>
+          <option value="Pending Approval">Pending Approval</option>
+          <option value="Approved">Approved</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:12px;">
+        <button class="btn btn-secondary" type="button" onclick="closeModal('booking-modal')" style="padding:10px 20px; font-size:0.9rem;">Cancel</button>
+        <button class="btn btn-primary" type="submit" style="padding:10px 20px; font-size:0.9rem;">Save Reservation</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Registration Modal Container -->
+  <div class="modal" id="registration-modal">
+    <div class="modal-header">
+      <h3 id="registration-modal-title" style="font-family:var(--font-heading); font-size:1.3rem; margin:0;">Edit Registration</h3>
+      <button class="close-modal-btn" onclick="closeModal('registration-modal')">&times;</button>
+    </div>
+    <form id="registration-modal-form">
+      <input type="hidden" id="registration-edit-key">
+      
+      <div class="form-group" style="margin-bottom:12px;">
+        <label class="form-label" for="reg-name-input">Participant Name</label>
+        <input class="form-input" type="text" id="reg-name-input" required placeholder="Participant Name">
+      </div>
+      
+      <div class="form-group" style="margin-bottom:12px;">
+        <label class="form-label" for="reg-phone-input">Mobile Number</label>
+        <input class="form-input" type="tel" id="reg-phone-input" required placeholder="Mobile number">
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label class="form-label" for="reg-email-input">Email Address</label>
+        <input class="form-input" type="email" id="reg-email-input" required placeholder="Email Address">
+      </div>
+      
+      <div class="form-group" style="margin-bottom:12px;">
+        <label class="form-label" for="reg-title-input">Tournament Title</label>
+        <input class="form-input" type="text" id="reg-title-input" required placeholder="Tournament name">
+      </div>
+
+      <div class="form-group" style="margin-bottom:20px;">
+        <label class="form-label" for="reg-notes-input">Remarks / Category</label>
+        <input class="form-input" type="text" id="reg-notes-input" placeholder="Age, category notes">
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:12px;">
+        <button class="btn btn-secondary" type="button" onclick="closeModal('registration-modal')" style="padding:10px 20px; font-size:0.9rem;">Cancel</button>
+        <button class="btn btn-primary" type="submit" style="padding:10px 20px; font-size:0.9rem;">Save Registration</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Inquiry Modal Container -->
+  <div class="modal" id="inquiry-modal">
+    <div class="modal-header">
+      <h3 id="inquiry-modal-title" style="font-family:var(--font-heading); font-size:1.3rem; margin:0;">Add New Inquiry</h3>
+      <button class="close-modal-btn" onclick="closeModal('inquiry-modal')">&times;</button>
+    </div>
+    <form id="inquiry-modal-form">
+      <input type="hidden" id="inquiry-edit-key">
+      
+      <div class="form-group" style="margin-bottom:12px;">
+        <label class="form-label" for="inq-name-input">Customer Name</label>
+        <input class="form-input" type="text" id="inq-name-input" required placeholder="Full Name">
+      </div>
+      
+      <div class="form-group" style="margin-bottom:12px;">
+        <label class="form-label" for="inq-phone-input">Phone Number</label>
+        <input class="form-input" type="tel" id="inq-phone-input" required placeholder="Phone Number">
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label class="form-label" for="inq-email-input">Email Address</label>
+        <input class="form-input" type="email" id="inq-email-input" required placeholder="Email Address">
+      </div>
+
+      <div class="form-group" style="margin-bottom:12px;">
+        <label class="form-label" for="inq-batch-input">Program Selection</label>
+        <select class="form-input" id="inq-batch-input" required>
+          <option value="General Enquiry">General Inquiry</option>
+          <option value="Monthly Pass">Monthly Pass (₹1,250/mo + ₹2,000 Deposit)</option>
+          <option value="6-Month Pass">6-Month Pass (₹6,000, No Deposit)</option>
+          <option value="10-Month Pass">10-Month Pass (₹10,000, No Deposit)</option>
+          <option value="Hourly Court Booking">Hourly Court Booking (₹500/hr)</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom:20px;">
+        <label class="form-label" for="inq-message-input">Message Notes</label>
+        <textarea class="form-input" id="inq-message-input" style="height:80px;" required placeholder="Inquiry notes"></textarea>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:12px;">
+        <button class="btn btn-secondary" type="button" onclick="closeModal('inquiry-modal')" style="padding:10px 20px; font-size:0.9rem;">Cancel</button>
+        <button class="btn btn-primary" type="submit" style="padding:10px 20px; font-size:0.9rem;">Save Inquiry</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Global UI Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="admin.js"></script>
+  <script src="cursor.js"></script>
+</body>
+</html>
