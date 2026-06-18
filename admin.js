@@ -1,13 +1,13 @@
 // Firebase Configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAYbLmshMYCNMTCfvD5W5m8m0iG8uDcb7c",
-  authDomain: "mavis-badmintion-academy.firebaseapp.com",
-  databaseURL: "https://mavis-badmintion-academy-default-rtdb.firebaseio.com",
-  projectId: "mavis-badmintion-academy",
-  storageBucket: "mavis-badmintion-academy.firebasestorage.app",
-  messagingSenderId: "153635676888",
-  appId: "1:153635676888:web:b11d0bad5655e0078aadad",
-  measurementId: "G-BS8PJQDXZF"
+  apiKey: "AIzaSyAjgGscVnXPCxNd3odkB_T1yRftXr2xMPs",
+  authDomain: "mavis-badminton-academy.firebaseapp.com",
+  databaseURL: "https://mavis-badminton-academy-default-rtdb.firebaseio.com",
+  projectId: "mavis-badminton-academy",
+  storageBucket: "mavis-badminton-academy.firebasestorage.app",
+  messagingSenderId: "654467997223",
+  appId: "1:654467997223:web:e7b2622fc2d438944cf802",
+  measurementId: "G-YJF16NHQDV"
 };
 
 // Initialize Firebase
