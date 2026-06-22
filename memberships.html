@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-E7C2JDX5HC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-E7C2JDX5HC');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memberships & Plans | Mavis Badminton Academy Gobichettipalayam</title>
+  <meta name="description"
+    content="Explore membership plans, monthly passes, and hourly court rental details at Mavis Badminton Academy in Gobichettipalayam. Join court packages with or without coach options.">
+  <meta name="keywords"
+    content="Mavis Badminton Academy memberships, badminton plans Gobichettipalayam, court booking packages, play badminton, sports memberships Gobi, badminton coaching packages">
+  <link rel="canonical" href="https://mavisbadminton.com/memberships.html">
+  <link rel="icon" type="image/jpeg" href="https://i.ibb.co/ZpqFnDd0/Logo.jpg">
+  <meta name="robots" content="index, follow">
+
+  <link rel="stylesheet" href="styles.css">
+  
+  <style>
+    body {
+      background-color: var(--bg-darker);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .memberships-container {
+      max-width: 1200px;
+      margin: 120px auto 60px auto;
+      padding: 0 24px;
+      width: 100%;
+      flex-grow: 1;
+    }
+
+    .membership-hero {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .membership-hero h1 {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+
+    .membership-hero p {
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+    }
+
+    /* Detailed grid cards for packages */
+    .plans-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .plan-detail-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      transition: all var(--transition-normal);
+      border-top: 4px solid var(--primary);
+    }
+
+    .plan-detail-card.featured-card {
+      grid-column: span 2;
+      background: radial-gradient(circle at top right, rgba(163, 230, 53, 0.1), transparent 55%), var(--bg-card);
+    }
+
+    .plan-detail-card.accent-border {
+      border-top-color: var(--accent);
+    }
+
+    .plan-detail-card.secondary-border {
+      border-top-color: var(--secondary);
+    }
+
+    .plan-header {
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 24px;
+      margin-bottom: 24px;
+    }
+
+    .plan-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 50px;
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .plan-badge.primary {
+      background: rgba(163, 230, 53, 0.1);
+      color: var(--primary);
+      border: 1px solid rgba(163, 230, 53, 0.2);
+    }
+
+    .plan-badge.accent {
+      background: rgba(6, 182, 212, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(6, 182, 212, 0.2);
+    }
+
+    .plan-badge.secondary {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--secondary);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .plan-title {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+
+    .plan-price {
+      font-family: var(--font-heading);
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-top: 12px;
+    }
+
+    .plan-price span {
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .plan-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .plan-features-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+    }
+
+    .plan-features-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.4;
+    }
+
+    .plan-features-list li::before {
+      content: '✓';
+      color: var(--primary);
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .plan-features-list.accent li::before {
+      color: var(--accent);
+    }
+
+    .plan-features-list.secondary li::before {
+      color: var(--secondary);
+    }
+
+    .plan-action-btn {
+      width: 100%;
+      justify-content: center;
+      margin-top: auto;
+    }
+
+    /* FAQ section */
+    .faq-section {
+      margin-top: 60px;
+      padding-top: 60px;
+      border-top: 1px solid var(--border-color);
+      margin-bottom: 40px;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 30px;
+    }
+
+    .faq-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+      color: var(--primary);
+    }
+
+    .faq-card p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 992px) {
+      .plans-detail-grid,
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
+      .plan-detail-card.featured-card {
+        grid-column: span 1;
+      }
+      .membership-hero h1 {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Synchronized Navigation Bar -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <a href="index.html#home" class="logo" id="nav-logo">
+        <div class="logo-icon">
+          <img src="https://i.ibb.co/ZpqFnDd0/Logo.jpg" alt="Logo" border="0">
+        </div>
+        <span>MAVIS<span class="text-gradient">.</span></span>
+      </a>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html#home" id="link-home">Home</a></li>
+        <li><a href="index.html#tournaments" id="link-tournaments">Tournaments</a></li>
+        <li><a href="index.html#about" id="link-about">About</a></li>
+        <li><a href="memberships.html" class="active" id="link-memberships">Memberships</a></li>
+        <li><a href="index.html#facilities" id="link-facilities">Facilities</a></li>
+        <li><a href="gallery.html" id="link-gallery">Gallery</a></li>
+        <li><a href="index.html#contact" id="link-contact">Contact</a></li>
+      </ul>
+
+      <div class="nav-cta">
+        <a href="index.html#booking" class="btn btn-primary" id="nav-cta-booking"
+          style="padding: 10px 20px; font-size: 0.9rem;">Book Slot</a>
+      </div>
+
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle Navigation Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="memberships-container">
+    <div class="membership-hero">
+      <span class="section-tag">Memberships & Passes</span>
+      <h1 class="text-gradient">Select Your Badminton Plan</h1>
+      <p>Whether you practice daily, play casually on weekends, or seek dedicated training sessions, we have flexible plans to accommodate your schedule.</p>
+    </div>
+
+    <!-- Main Detail Grid -->
+    <main class="plans-detail-grid">
+      
+      <!-- Featured Card: Student Coaching Batch -->
+      <div class="glass-card plan-detail-card featured-card" id="detail-student" style="border-top: 4px solid var(--primary);">
+        <div>
+          <div class="plan-header" style="display: flex; flex-direction: column; align-items: flex-start;">
+            <span class="plan-badge primary">Student Special (Coaching & Training)</span>
+            <h2 class="plan-title">Student Coaching Batch</h2>
+            <p class="plan-desc">Structured professional coaching and physical training batches optimized for school & college students.</p>
+            <div style="display: flex; gap: 40px; align-items: baseline; flex-wrap: wrap; margin-top: 10px;">
+              <div class="plan-price">₹3,000 <span style="font-size:0.95rem; font-weight: 500;">/ month (Regular Batch)</span></div>
+              <div class="plan-price" style="color: var(--accent);">₹2,000 <span style="font-size:0.95rem; font-weight: 500;">/ month (Weekend Batch)</span></div>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-top:12px; font-weight: 600;">
+              ⏱️ Timings: 1st Batch (5:30 PM - 7:00 PM) | 2nd Batch (6:30 PM - 8:00 PM)
+            </p>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+            <ul class="plan-features-list">
+              <li>Regular batches running Monday to Friday (5:30 PM - 7:00 PM or 6:30 PM - 8:00 PM)</li>
+              <li>Weekend-only training batch on Saturday & Sunday (₹2,000/mo)</li>
+              <li>Expert conditioning, stroke correction, and advanced footwork agility</li>
+            </ul>
+            <ul class="plan-features-list">
+              <li>Direct professional coaching under NIS certified badminton trainers</li>
+              <li>Access to premium BWF-certified synthetic court mats and gear</li>
+              <li>Zero security deposit required upfront for student registrations</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div style="display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap;">
+          <a href="index.html#contact" class="btn btn-primary plan-action-btn" onclick="selectBatch('Student Batch - Monthly')">
+            Inquire Monthly Batch (₹3,000)
+          </a>
+          <a href="index.html#contact" class="btn btn-secondary plan-action-btn" style="border-color: var(--primary); color: var(--primary);" onclick="selectBatch('Student Batch - Weekend')">
+            Inquire Weekend Batch (₹2,000)
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 1: Monthly Pass -->
+      <div class="glass-card plan-detail-card" id="detail-monthly">
+        <div>
+          <div class="plan-header">
+            <span class="plan-badge secondary">Silver Pass</span>
+            <h2 class="plan-title">Monthly pass</h2>
+            <p class="plan-desc">Perfect for local enthusiasts looking for consistent daily court sessions and standard club matchplay.</p>
+            <div class="plan-price">₹1,250 <span>/ month</span></div>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">*Requires refundable ₹2,000 security deposit</p>
+          </div>
+          
+          <ul class="plan-features-list secondary">
+            <li>Daily 1-hour court access slots (Morning or Evening batches)</li>
+            <li>Play on standard BWF-certified synthetic court mats</li>
+            <li>Access to changing rooms, lockers, and clean shower amenities</li>
+            <li>Opportunity to join academy ladder tournaments & leagues</li>
+            <li>Priority booking windows (24 hours in advance)</li>
+          </ul>
+        </div>
+        
+        <a href="index.html#contact" class="btn btn-secondary plan-action-btn" onclick="selectBatch('Monthly Pass')">
+          Select Plan & Connect
+        </a>
+      </div>
+
+      <!-- Card 2: 6 Months Pass -->
+      <div class="glass-card plan-detail-card" id="detail-6months" style="border-top-color: var(--primary);">
+        <div>
+          <div class="plan-header">
+            <span class="plan-badge primary">Gold Pass (Popular)</span>
+            <h2 class="plan-title">6-Month Pass</h2>
+            <p class="plan-desc">An optimized long-term play pass offering maximum savings and immediate deposit exemptions.</p>
+            <div class="plan-price">₹6,000 <span>/ 6 months</span></div>
+            <p style="font-size:0.75rem; color:var(--primary); font-weight:600; margin-top:4px;">*NO security deposit required (Save ₹2,000 instantly!)</p>
+          </div>
+          
+          <ul class="plan-features-list">
+            <li>Unlimited daily slot scheduling configurations</li>
+            <li>Guaranteed access to anti-glare lit professional courts</li>
+            <li>Zero security deposit requirements upfront</li>
+            <li>10% discount on on-site racquet rentals and shuttle purchases</li>
+            <li>Flexible shift scheduling adjustments based on availability</li>
+            <li>Access to professional coaching guidance templates</li>
+          </ul>
+        </div>
+        
+        <a href="index.html#contact" class="btn btn-primary plan-action-btn" onclick="selectBatch('6-Month Pass')">
+          Select Plan & Connect
+        </a>
+      </div>
+
+      <!-- Card 3: 10 Months Pass -->
+      <div class="glass-card plan-detail-card" id="detail-10months">
+        <div>
+          <div class="plan-header">
+            <span class="plan-badge accent">Diamond Pass</span>
+            <h2 class="plan-title">10-Month Pass</h2>
+            <p class="plan-desc">The ultimate package designed for committed athletes, tournament players, and long-term badminton trainees.</p>
+            <div class="plan-price">₹10,000 <span>/ 10 months</span></div>
+            <p style="font-size:0.75rem; color:var(--accent); font-weight:600; margin-top:4px;">*NO security deposit required (Best value selection!)</p>
+          </div>
+          
+          <ul class="plan-features-list accent">
+            <li>Premium daily slot booking (Up to 7 days in advance)</li>
+            <li>Unlimited court scheduling with prioritized peak hours (5 AM - 9 AM / 5 PM - 9 PM)</li>
+            <li>Zero deposit overhead constraints</li>
+            <li>Free minor grip replacement and basic racquet stringing assists</li>
+            <li>Complimentary invitation to all Mavis internal smash tournaments</li>
+            <li>Dedicated player locker allocation for the entire duration</li>
+          </ul>
+        </div>
+        
+        <a href="index.html#contact" class="btn btn-secondary plan-action-btn" style="border-color:var(--accent); color:var(--accent);" onclick="selectBatch('10-Month Pass')">
+          Select Plan & Connect
+        </a>
+      </div>
+
+      <!-- Card 4: Hourly Casual Play -->
+      <div class="glass-card plan-detail-card" id="detail-hourly">
+        <div>
+          <div class="plan-header">
+            <span class="plan-badge secondary">Casual Play</span>
+            <h2 class="plan-title">Casual Play (Hourly)</h2>
+            <p class="plan-desc">For players wanting flexible, commitment-free indoor games with friends and family.</p>
+            <div class="plan-price">₹500 <span>/ hour</span></div>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">*Pay at reception counter | No deposit required</p>
+          </div>
+          
+          <ul class="plan-features-list secondary">
+            <li>Book court slots online instantly via simulator</li>
+            <li>High-end green synthetic shock-absorbent mat access</li>
+            <li>Anti-glare spotlight configuration for shadow-free vision</li>
+            <li>Racquets and shuttles available for rent on-site</li>
+            <li>Lounge, power backup, and clean drinking water facilities</li>
+          </ul>
+        </div>
+        
+        <a href="index.html#booking" class="btn btn-secondary plan-action-btn">
+          Book Court Instantly
+        </a>
+      </div>
+
+    </main>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+      <div class="section-title-wrapper" style="margin-bottom: 40px;">
+        <span class="section-tag">Common Queries</span>
+        <h2 class="section-title">Membership FAQ</h2>
+      </div>
+      
+      <div class="faq-grid">
+        <div class="faq-card">
+          <h3>What are the student coaching timings and batches?</h3>
+          <p>We run two daily coaching batches for students: Batch 1 from 5:30 PM to 7:00 PM, and Batch 2 from 6:30 PM to 8:00 PM (Monday to Friday). A dedicated Weekend Batch (Saturday & Sunday) is also available at ₹2,000/month.</p>
+        </div>
+
+        <div class="faq-card">
+          <h3>Do I need to pay a security deposit?</h3>
+          <p>A refundable security deposit of ₹2,000 is only required for our standard Monthly Pass. The 6-Month, 10-Month, and Hourly Casual Play plans are completely deposit-free.</p>
+        </div>
+
+        <div class="faq-card">
+          <h3>Are coaching charges included in the memberships?</h3>
+          <p>Our standard passes cover court access and membership privileges. Professional coaching programs and dedicated training batches are available separately, or can be bundled. Get in touch with our coaches for detailed training curriculums.</p>
+        </div>
+
+        <div class="faq-card">
+          <h3>How do I reserve slots with my membership?</h3>
+          <p>Members get access to our priority booking calendar. You can select your preferred shift (Morning/Evening) and reserve your court time slot. Slots are booked in 1-hour increments.</p>
+        </div>
+
+        <div class="faq-card">
+          <h3>Can I rent playing equipment at the facility?</h3>
+          <p>Yes! We offer premium quality badminton carbon-fiber racquets and professional feather/nylon shuttlecocks for rent at the academy reception desk at highly affordable hourly rates.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Synchronized Quick Links Footer -->
+  <section class="section" id="quick-links"
+    style="padding: 60px 0; background: var(--bg-darker); border-top: 1px solid var(--border-color); position: relative; z-index: 5;">
+    <div class="container">
+      <div class="quick-links-grid">
+        <!-- Column 1: Brand details & Social icons -->
+        <div>
+          <a href="index.html#home" class="logo" style="margin-bottom: 20px; display: inline-flex;">
+            <div class="logo-icon" style="width: 28px; height: 28px;">
+              <img src="https://i.ibb.co/ZpqFnDd0/Logo.jpg" alt="Logo" border="0">
+            </div>
+            <span>MAVIS<span class="text-gradient">.</span></span>
+          </a>
+          <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 320px; margin-bottom: 24px;">
+            Gobichettipalayam's state-of-the-art indoor badminton center. Dedicated to elevating players from beginners
+            to competitive legends.
+          </p>
+          <!-- Social icons with Messaging links -->
+          <div style="display: flex; gap: 14px;">
+            <a href="https://wa.me/919842799975" target="_blank" rel="noopener" aria-label="WhatsApp Chat Us"
+              class="social-icon-btn whatsapp">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.517 2.266 2.27 3.507 5.289 3.507 8.496-.003 6.658-5.338 11.997-11.945 11.997-2.007-.001-3.98-.501-5.736-1.456L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.97C16.59 1.967 14.11 1.01 11.516 1.01c-5.44 0-9.866 4.372-9.87 9.802 0 1.714.457 3.39 1.32 4.896l-.993 3.63 3.77-.974.06.035z" />
+              </svg>
+            </a>
+            <a href="https://www.instagram.com/mavisbadmintionacademy/" target="_blank" rel="noopener"
+              aria-label="Instagram Messaging" class="social-icon-btn instagram">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
+              </svg>
+            </a>
+            <a href="mailto:mavisbadmintonacademy@gmail.com" target="_blank" rel="noopener" aria-label="Email Us"
+              class="social-icon-btn mail">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Column 2: Quick Links -->
+        <div>
+          <h4
+            style="font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 20px; color: var(--text-main);">
+            Quick Links</h4>
+          <ul
+            style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; color: var(--text-muted);"
+            class="footer-links">
+            <li><a href="index.html#home">Home</a></li>
+            <li><a href="index.html#tournaments">Tournaments</a></li>
+            <li><a href="index.html#about">About Academy</a></li>
+            <li><a href="index.html#founder">About Founder</a></li>
+            <li><a href="memberships.html">Memberships</a></li>
+            <li><a href="index.html#booking">Book Court Slot</a></li>
+            <li><a href="index.html#facilities">Our Amenities</a></li>
+            <li><a href="index.html#reviews">Real-Time Reviews</a></li>
+            <li><a href="gallery.html">Media Gallery</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Academy operational slots -->
+        <div>
+          <h4
+            style="font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 20px; color: var(--text-main);">
+            Hours of Operation</h4>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 12px;">
+            <span style="color: var(--primary); font-weight:600;">Hourly Court Booking:</span><br>Daily Slots: 05:00 AM
+            - 10:00 PM
+          </p>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">
+            <span style="color: var(--primary); font-weight:600;">Coaching Programs:</span><br>Mon - Fri Batches: 06:30
+            AM & 04:30 PM<br>Sat - Sun Batches: 06:00 AM
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer-bottom">
+    <div class="container">
+      <div class="footer-logo">
+        <a href="index.html#home" class="logo">
+          <div class="logo-icon" style="width:28px; height:28px;">
+            <img src="https://i.ibb.co/ZpqFnDd0/Logo.jpg" alt="Logo" border="0">
+          </div>
+          <span>MAVIS<span style="color: var(--primary);">.</span></span>
+        </a>
+      </div>
+      <p style="margin-bottom: 8px;">&copy; 2026 <a href="https://www.youngtechs.in" target="_blank" rel="noopener"
+          style="text-decoration: underline; color: inherit;">Young Technology</a> .All Rights Reserved.</p>
+      <p style="font-size:0.75rem; color:var(--text-muted);">Modachur Kalaramani Road, Near Narayana school campus, Opposite Jagan Metal Mart, Gobichettipalayam, Tamil Nadu - 638452</p>
+    </div>
+  </footer>
+
+  <!-- Script triggers -->
+  <script>
+    // Local selectBatch routing helper back to index contact form
+    window.selectBatch = function(batchName) {
+      localStorage.setItem('selected_inquiry_batch', batchName);
+      window.location.href = 'index.html#contact';
+    };
+
+    // Mobile nav toggle control
+    document.addEventListener('DOMContentLoaded', () => {
+      const navToggle = document.getElementById('nav-toggle');
+      const navLinks = document.getElementById('nav-links');
+      const links = navLinks.querySelectorAll('a');
+
+      navToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        navToggle.classList.toggle('open');
+      });
+
+      links.forEach(link => {
+        link.addEventListener('click', () => {
+          navLinks.classList.remove('active');
+          navToggle.classList.remove('open');
+        });
+      });
+    });
+  </script>
+  
+  <script src="cursor.js"></script>
+</body>
+
+</html>

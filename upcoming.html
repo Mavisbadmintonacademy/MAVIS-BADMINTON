@@ -164,21 +164,38 @@
 </head>
 <body>
 
-  <!-- Floating Header -->
-  <header class="navbar scrolled">
+  <!-- Navigation Bar -->
+  <nav class="navbar scrolled" id="navbar">
     <div class="container">
-      <div class="logo">
+      <a href="index.html#home" class="logo" id="nav-logo">
         <div class="logo-icon">
           <img src="https://i.ibb.co/ZpqFnDd0/Logo.jpg" alt="Logo" border="0">
         </div>
-        <span>Mavis Academy</span>
+        <span>MAVIS<span class="text-gradient">.</span></span>
+      </a>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html#home" id="link-home">Home</a></li>
+        <li><a href="index.html#tournaments" id="link-tournaments">Tournaments</a></li>
+        <li><a href="index.html#about" id="link-about">About</a></li>
+        <li><a href="memberships.html" id="link-memberships">Memberships</a></li>
+        <li><a href="index.html#facilities" id="link-facilities">Facilities</a></li>
+        <li><a href="gallery.html" id="link-gallery">Gallery</a></li>
+        <li><a href="index.html#contact" id="link-contact">Contact</a></li>
+      </ul>
+
+      <div class="nav-cta">
+        <a href="index.html#booking" class="btn btn-primary" id="nav-cta-booking"
+          style="padding: 10px 20px; font-size: 0.9rem;">Book Slot</a>
       </div>
-      <div style="display: flex; gap: 10px;">
-        <a href="index.html" class="btn btn-secondary" style="padding: 8px 18px; font-size: 0.85rem;">Go to Home</a>
-        <a href="gallery.html" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.85rem; box-shadow: none;">Go to Gallery</a>
-      </div>
+
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle Navigation Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
-  </header>
+  </nav>
 
   <div class="detail-container">
     <div class="back-nav">
@@ -248,34 +265,106 @@
 
   <div class="toast-container" id="toast-container"></div>
 
-  <footer class="footer-bottom" style="margin-top:auto;">
+  <!-- Synchronized Quick Links Footer -->
+  <section class="section" id="quick-links"
+    style="padding: 60px 0; background: var(--bg-darker); border-top: 1px solid var(--border-color); position: relative; z-index: 5; margin-top: auto;">
     <div class="container">
-      <p>&copy; 2026 Mavis Badminton Academy. Located in Gobichettipalayam.</p>
+      <div class="quick-links-grid">
+        <!-- Column 1: Brand details & Social icons -->
+        <div>
+          <a href="index.html#home" class="logo" style="margin-bottom: 20px; display: inline-flex;">
+            <div class="logo-icon" style="width: 28px; height: 28px;">
+              <img src="https://i.ibb.co/ZpqFnDd0/Logo.jpg" alt="Logo" border="0">
+            </div>
+            <span>MAVIS<span class="text-gradient">.</span></span>
+          </a>
+          <p style="color: var(--text-muted); font-size: 0.9rem; max-width: 320px; margin-bottom: 24px;">
+            Gobichettipalayam's state-of-the-art indoor badminton center. Dedicated to elevating players from beginners
+            to competitive legends.
+          </p>
+          <!-- Social icons with Messaging links -->
+          <div style="display: flex; gap: 14px;">
+            <a href="https://wa.me/919842799975" target="_blank" rel="noopener" aria-label="WhatsApp Chat Us"
+              class="social-icon-btn whatsapp">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.517 2.266 2.27 3.507 5.289 3.507 8.496-.003 6.658-5.338 11.997-11.945 11.997-2.007-.001-3.98-.501-5.736-1.456L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.97C16.59 1.967 14.11 1.01 11.516 1.01c-5.44 0-9.866 4.372-9.87 9.802 0 1.714.457 3.39 1.32 4.896l-.993 3.63 3.77-.974.06.035z" />
+              </svg>
+            </a>
+            <a href="https://www.instagram.com/mavisbadmintionacademy/" target="_blank" rel="noopener"
+              aria-label="Instagram Messaging" class="social-icon-btn instagram">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
+              </svg>
+            </a>
+            <a href="mailto:mavisbadmintonacademy@gmail.com" target="_blank" rel="noopener" aria-label="Email Us"
+              class="social-icon-btn mail">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Column 2: Quick Links -->
+        <div>
+          <h4
+            style="font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 20px; color: var(--text-main);">
+            Quick Links</h4>
+          <ul
+            style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; color: var(--text-muted);"
+            class="footer-links">
+            <li><a href="index.html#home">Home</a></li>
+            <li><a href="index.html#tournaments">Tournaments</a></li>
+            <li><a href="index.html#about">About Academy</a></li>
+            <li><a href="index.html#founder">About Founder</a></li>
+            <li><a href="memberships.html">Memberships</a></li>
+            <li><a href="index.html#booking">Book Court Slot</a></li>
+            <li><a href="index.html#facilities">Our Amenities</a></li>
+            <li><a href="index.html#reviews">Real-Time Reviews</a></li>
+            <li><a href="gallery.html">Media Gallery</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Academy operational slots -->
+        <div>
+          <h4
+            style="font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 20px; color: var(--text-main);">
+            Hours of Operation</h4>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 12px;">
+            <span style="color: var(--primary); font-weight:600;">Hourly Court Booking:</span><br>Daily Slots: 05:00 AM
+            - 10:00 PM
+          </p>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">
+            <span style="color: var(--primary); font-weight:600;">Coaching Programs:</span><br>Mon - Fri Batches: 06:30
+            AM & 04:30 PM<br>Sat - Sun Batches: 06:00 AM
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer-bottom">
+    <div class="container">
+      <div class="footer-logo">
+        <a href="index.html#home" class="logo">
+          <div class="logo-icon" style="width:28px; height:28px;">
+            <img src="https://i.ibb.co/ZpqFnDd0/Logo.jpg" alt="Logo" border="0">
+          </div>
+          <span>MAVIS<span style="color: var(--primary);">.</span></span>
+        </a>
+      </div>
+      <p style="margin-bottom: 8px;">&copy; 2026 <a href="https://www.youngtechs.in" target="_blank" rel="noopener"
+          style="text-decoration: underline; color: inherit;">Young Technology</a> .All Rights Reserved.</p>
+      <p style="font-size:0.75rem; color:var(--text-muted);">Modachur Kalaramani Road, Near Narayana school campus, Opposite Jagan Metal Mart, Gobichettipalayam, Tamil Nadu - 638452</p>
     </div>
   </footer>
 
+  <script src="app.js"></script>
   <script>
-    // Firebase Config
-    const firebaseConfig = {
-      apiKey: "AIzaSyAjgGscVnXPCxNd3odkB_T1yRftXr2xMPs",
-      authDomain: "mavis-badminton-academy.firebaseapp.com",
-      databaseURL: "https://mavis-badminton-academy-default-rtdb.firebaseio.com",
-      projectId: "mavis-badminton-academy",
-      storageBucket: "mavis-badminton-academy.firebasestorage.app",
-      messagingSenderId: "654467997223",
-      appId: "1:654467997223:web:e7b2622fc2d438944cf802",
-      measurementId: "G-YJF16NHQDV"
-    };
-
-    let db;
-    try {
-      firebase.initializeApp(firebaseConfig);
-      db = firebase.database();
-    } catch(e) {
-      console.error(e);
-    }
-
-    const OWNER_PHONE = "919842799975"; // Academy Owner phone
 
     const urlParams = new URLSearchParams(window.location.search);
     const tournamentId = urlParams.get('id');

@@ -13,8 +13,12 @@ const firebaseConfig = {
 // Initialize Firebase compat
 let db;
 try {
-  firebase.initializeApp(firebaseConfig);
-  db = firebase.database();
+  if (typeof firebase !== 'undefined') {
+    if (firebase.apps.length === 0) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    db = firebase.database();
+  }
 } catch (e) {
   console.error("Firebase Initialization Error: Make sure scripts are loaded.", e);
 }
@@ -81,6 +85,7 @@ function initNavbar() {
   const navbar = document.getElementById('navbar');
   const navToggle = document.getElementById('nav-toggle');
   const navLinks = document.getElementById('nav-links');
+  if (!navbar || !navToggle || !navLinks) return;
   const links = navLinks.querySelectorAll('a');
 
   // Change background on scroll
@@ -104,7 +109,8 @@ function initNavbar() {
 
     links.forEach(a => {
       a.classList.remove('active');
-      if (a.getAttribute('href') === `#${current}`) {
+      const href = a.getAttribute('href');
+      if (href && href.endsWith(`#${current}`)) {
         a.classList.add('active');
       }
     });
@@ -133,6 +139,7 @@ let courtPrice = 500;
 
 function initBookingSimulator() {
   const courtTabs = document.getElementById('court-tabs');
+  if (!courtTabs) return;
   const calendarDays = document.getElementById('calendar-days');
   const slotsGrid = document.getElementById('slots-grid');
   
@@ -462,6 +469,16 @@ function initContactForm() {
   const form = document.getElementById('contact-form');
   if (!form) return;
 
+  // Check if a batch selection was passed from another page
+  const storedBatch = localStorage.getItem('selected_inquiry_batch');
+  if (storedBatch) {
+    const selectElement = document.getElementById('contact-batch');
+    if (selectElement) {
+      selectElement.value = storedBatch;
+      localStorage.removeItem('selected_inquiry_batch');
+    }
+  }
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     if (!db) {
@@ -486,6 +503,17 @@ function initContactForm() {
 
     db.ref('inquiries').push(newInquiry).then(() => {
       showToast('Inquiry submitted! We will call you soon.');
+      
+      // WhatsApp Click-to-chat redirection for inquiry
+      const greetingMsg = `Hello Mavis Badminton Academy,\n\nI have just submitted a contact/program inquiry on your website. Here are my details:\n\n👤 Name: ${name}\n📞 Phone No: ${phone}\n📧 Email: ${email}\n📦 Program of Interest: ${batch}\n📝 Message: ${message}`;
+      const encodedMsg = encodeURIComponent(greetingMsg);
+      const whatsappUrl = `https://wa.me/${OWNER_PHONE}?text=${encodedMsg}`;
+      
+      showToast('Opening WhatsApp to send your inquiry...', 'success');
+      setTimeout(() => {
+        window.open(whatsappUrl, '_blank');
+      }, 1200);
+
       form.reset();
     }).catch(err => {
       console.error(err);
