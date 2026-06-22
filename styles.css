@@ -471,6 +471,13 @@ img {
   align-items: center;
 }
 
+.symmetrical-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: stretch;
+}
+
 .about-features {
   display: grid;
   grid-template-columns: 1fr 1fr;
