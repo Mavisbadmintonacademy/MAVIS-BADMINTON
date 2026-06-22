@@ -1152,6 +1152,7 @@ img {
 }
 
 .form-input {
+  width: 100%;
   background: var(--bg-dark);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
@@ -1326,6 +1327,7 @@ textarea.form-input {
   }
   .hero-grid,
   .about-grid,
+  .symmetrical-grid,
   .booking-panel,
   .contact-grid {
     grid-template-columns: 1fr;
@@ -1400,6 +1402,9 @@ textarea.form-input {
   .contact-form-full {
     grid-column: span 1;
   }
+  #special-programs .glass-card {
+    padding: 24px !important;
+  }
 }
 
 @media (max-width: 992px) {
@@ -1418,6 +1423,9 @@ textarea.form-input {
   #winners-gallery {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+  .glass-card {
+    padding: 20px;
   }
 }
 
@@ -1447,6 +1455,9 @@ textarea.form-input {
   .slot-pill {
     padding: 8px 10px;
     font-size: 0.75rem;
+  }
+  #special-programs .glass-card {
+    padding: 16px !important;
   }
 }
 
